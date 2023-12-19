@@ -5,12 +5,16 @@
       An opinionated Vue 3, TypeScript, Tailwind CSS and ESLint template.
     </p>
     <p>
-      View this project on <a
+      View this project on
+      <a
         href="https://github.com/vincentdoerig/vue3-typescript-tailwind-starter"
-      >GitHub</a>. It uses <a href="https://github.com/vitejs/vite">vite</a> to provide a fast development experience with hot module replacement. Try it out by editing <code>components/HelloWorld.vue</code>.
+      >GitHub</a>. It uses <a href="https://github.com/vitejs/vite">vite</a> to provide a
+      fast development experience with hot module replacement. Try it out by
+      editing <code>components/HelloWorld.vue</code>.
     </p>
     <p>
-      Vue router is also included and configured, you could try navigating to <router-link to="/about">
+      Vue router is also included and configured, you could try navigating to
+      <router-link to="/about">
         another page
       </router-link> or to a page that
       <router-link to="/foo">
@@ -18,7 +22,9 @@
       </router-link>.
     </p>
     <h2>Installing</h2>
-    <p>To quickly get started, enter a project name and run the commands below.</p>
+    <p>
+      To quickly get started, enter a project name and run the commands below.
+    </p>
     <div>
       <label
         for="project-name"
@@ -41,7 +47,9 @@ cd {{ name || '&lt;project-name&gt;' }}
 rm -rf .git <span class="text-gray-500"># remove git folder</span>
 git init <span class="text-gray-500"># initialise git for your new project</span></pre>
     <p>
-      Alternatively, use this starter by clicking the <code>Use this template</code> button on <a
+      Alternatively, use this starter by clicking the
+      <code>Use this template</code> button on
+      <a
         href="https://github.com/vincentdoerig/vue3-typescript-tailwind-starter"
       >GitHub</a>.
     </p>
@@ -70,24 +78,40 @@ git init <span class="text-gray-500"># initialise git for your new project</span
 </template>
 
 <script lang="ts">
-import { defineComponent, toRef, ref } from 'vue'
-import { globalState } from '../store'
+import { defineComponent, toRef, ref } from "vue";
+import { globalState } from "../store";
+import * as contentful from "contentful";
 
 export default defineComponent({
   props: {
     msg: {
       type: String,
-      default: '',
+      default: "",
     },
   },
 
   setup() {
+    const post: any = ref(null);
+    const client = contentful.createClient({
+      space: "uhy3tvjer8hs",
+      environment: "master", // defaults to 'master' if not set
+      accessToken: "Zgrt13_vJqXM_wi_DeHI14cwmlSPhpOYbsNUtYdQFso",
+    });
+
+    client
+      .getEntry("2IEBSAAfieSOvTiCntG49t")
+      .then((entry) => {
+        post.value = entry;
+        console.log("post.value", post.value);
+      })
+      .catch(console.error);
+
     return {
-      count: toRef(globalState, 'count'),
-      name: ref(''),
-    }
+      count: toRef(globalState, "count"),
+      name: ref(""),
+    };
   },
-})
+});
 </script>
 
 <style>
