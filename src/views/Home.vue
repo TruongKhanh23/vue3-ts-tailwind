@@ -1,15 +1,15 @@
 <template>
-  <HelloWorld msg="Vue 3, Vite, TypeScript & Tailwind CSS" />
+  <GraphQLContentful />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import HelloWorld from '../components/HelloWorld.vue'
+import GraphQLContentful from '../components/GraphQLContentful.vue'
 
 export default defineComponent({
   components: {
-    HelloWorld,
+    GraphQLContentful,
   },
 })
 </script>
