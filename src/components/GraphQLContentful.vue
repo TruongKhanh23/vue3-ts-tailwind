@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1 class="font-bold text-3xl mb-8">
+    <h1 class="text-4xl font-extrabold mb-8">
       {{ document.title }}
     </h1>
     <RichTextRenderer
       :document="document.content.json"
-      :node-renderers="renderNodes(document.content.links)"
+      :node-renderers="renderNodes(document.content.links, videos)"
       :mark-renderers="renderMarks()"
     />
   </div>
@@ -13,7 +13,8 @@
 <script>
 import { onMounted, ref, watch } from "vue";
 import { getNews, getNewsById } from "../composables/news/index.js";
-import { renderMarks, renderNodes } from "../composables/richText/index.js"
+import { getVideos } from "../composables/video/index.js";
+import { renderMarks, renderNodes } from "../composables/richText/index.js";
 
 import RichTextRenderer from "contentful-rich-text-vue-renderer";
 
@@ -23,6 +24,8 @@ export default {
   },
   setup() {
     const news = ref([]);
+    const videos = ref([]);
+    const embeddedEntryBlockList = ref([]);
     const document = ref({
       nodeType: "document",
       content: [],
@@ -34,9 +37,10 @@ export default {
 
     watch(news, async () => {
       document.value = news.value[0];
+      videos.value = await getVideos();
     });
 
-    return { news, document, renderMarks, renderNodes };
+    return { news, document, renderMarks, renderNodes, videos };
   },
 };
 </script>

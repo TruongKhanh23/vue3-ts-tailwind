@@ -12,46 +12,118 @@ export function renderMarks() {
   };
 }
 
-export function renderNodes(links) {
+export function renderNodes(links, videos) {
   return {
-    [BLOCKS.PARAGRAPH]: customRenderParagraph,
-    [BLOCKS.EMBEDDED_ENTRY]: (node, key, next) =>
-      h("div", { key }, next(node.content, key, next)),
-    [BLOCKS.EMBEDDED_ASSET]: (node, key, next) => {
-      const { id } = node.data.target.sys;
-      const { block: assetList } = links.assets;
-      const asset = assetList.find((item) => (item.sys.id = id));
-      const { url: imageUrl } = asset;
-      return h("img", { key, src: imageUrl }, next(node.content, key, next));
-    },
+    [BLOCKS.PARAGRAPH]: customParagraph,
+    [BLOCKS.HEADING_1]: customHeading1,
     [BLOCKS.HEADING_2]: customHeading2,
+    [BLOCKS.HEADING_3]: customHeading3,
+    [BLOCKS.HEADING_4]: customHeading4,
+    [BLOCKS.HEADING_5]: customHeading5,
+    [BLOCKS.HEADING_6]: customHeading6,
+    [BLOCKS.EMBEDDED_ENTRY]: (node, key, next) =>
+      customEmbeddedEntryBlock(node, key, next, videos),
+    [BLOCKS.EMBEDDED_ASSET]: (node, key, next) =>
+      customEmbededAssets(node, key, next, links),
     [INLINES.ASSET_HYPERLINK]: (node, key) =>
       defaultInline(INLINES.ASSET_HYPERLINK, node, key),
     [INLINES.ENTRY_HYPERLINK]: (node, key) =>
       defaultInline(INLINES.ENTRY_HYPERLINK, node, key),
-    [INLINES.HYPERLINK]: (node, key, next) => {
-      return h(
-        "a",
-        {
-          key,
-          href: node.data.uri,
-          class: ["underline text-[blue]"],
-        },
-        next(node.content, key, next),
-      );
-    },
+    [INLINES.HYPERLINK]: customInlinesHyperlink,
   };
+}
+function customInlinesHyperlink(node, key, next) {
+  return h(
+    "a",
+    {
+      key,
+      href: node.data.uri,
+      class: ["underline"],
+      style: {
+        color: "blue",
+      },
+    },
+    next(node.content, key, next),
+  );
+}
+
+function customEmbededAssets(node, key, next, links) {
+  const { id } = node.data.target.sys;
+  const { block: assetList } = links.assets;
+  const asset = assetList.find((item) => (item.sys.id = id));
+  const { url: imageUrl } = asset;
+  return h("img", { key, src: imageUrl }, next(node.content, key, next));
+}
+
+function customEmbeddedEntryBlock(node, key, next, videos) {
+  const { id } = node.data.target.sys;
+  const video = videos.find((item) => item.sys.id === id);
+  const iframeUrl = video.url;
+  return h(
+    "iframe",
+    {
+      key,
+      width: "560",
+      height: "315",
+      src: iframeUrl,
+      title: "YouTube video player",
+      allow:
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+      allowfullscreen: true,
+    },
+    next(node.content, key, next),
+  );
+}
+
+function customHeading1(node, key, next) {
+  return h(
+    "h1",
+    { key, class: ["text-4xl font-extrabold"] },
+    next(node.content, key, next),
+  );
 }
 
 function customHeading2(node, key, next) {
   return h(
     "h2",
-    { key, class: ["font-bold text-xl"] },
+    { key, class: ["text-3xl font-extrabold"] },
     next(node.content, key, next),
   );
 }
 
-function customRenderParagraph(node, key, next) {
+function customHeading3(node, key, next) {
+  return h(
+    "h3",
+    { key, class: ["text-2xl font-bold"] },
+    next(node.content, key, next),
+  );
+}
+
+function customHeading4(node, key, next) {
+  return h(
+    "h4",
+    { key, class: ["text-xl font-bold"] },
+    next(node.content, key, next),
+  );
+}
+
+function customHeading5(node, key, next) {
+  return h(
+    "h5",
+    { key, class: ["text-lg font-bold"] },
+    next(node.content, key, next),
+  );
+}
+
+function customHeading6(node, key, next) {
+  return h(
+    "h6",
+    { key, class: ["text-base font-bold"] },
+    next(node.content, key, next),
+  );
+}
+
+function customParagraph(node, key, next) {
   return h(
     "p",
     {
