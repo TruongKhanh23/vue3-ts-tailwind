@@ -1,140 +1,57 @@
 <template>
-  <header class="bg-white">
-    <nav
-      class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
-      aria-label="Global"
-    >
-      <div class="flex lg:flex-1">
-        <a
-          href="#"
-          class="-m-1.5 p-1.5"
-        >
-          <span class="sr-only">Your Company</span>
-          <img
-            class="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt=""
-          >
-        </a>
-      </div>
-      <div class="flex lg:hidden">
-        <button
-          type="button"
-          class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-        >
-          <span class="sr-only">Open main menu</span>
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="hidden lg:flex lg:gap-x-12">
-        <router-link
-          to="/"
-          class="text-sm font-semibold leading-6 text-gray-900"
-        >
-          Home
-        </router-link>
-        <router-link
-          to="/about"
-          class="text-sm font-semibold leading-6 text-gray-900"
-        >
-          About
-        </router-link>
-        <router-link
-          to="/not-found"
-          class="text-sm font-semibold leading-6 text-gray-900"
-        >
-          Not Found
-        </router-link>
-      </div>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a
-          href="#"
-          class="text-sm font-semibold leading-6 text-gray-900"
-        >Log in <span aria-hidden="true">&rarr;</span></a>
-      </div>
-    </nav>
-    <!-- Mobile menu, show/hide based on menu open state. -->
+  <nav id="nav" class="sm:container sm:mx-auto">
+    <!-- Header start -->
     <div
-      class="lg:hidden"
-      role="dialog"
-      aria-modal="true"
+      class="z-10 max-w-screen-lg xl:max-w-screen-xl block sm:flex sm:justify-between sm:items-center my-6"
     >
-      <!-- Background backdrop, show/hide based on slide-over state. -->
-      <div class="fixed inset-0 z-10" />
-      <div
-        class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
-      >
-        <div class="flex items-center justify-between">
-          <a
-            href="#"
-            class="-m-1.5 p-1.5"
-          >
-            <span class="sr-only">Your Company</span>
-            <img
-              class="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt=""
-            >
-          </a>
-          <button
-            type="button"
-            class="-m-2.5 rounded-md p-2.5 text-gray-700"
-          >
-            <span class="sr-only">Close menu</span>
-            <svg
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+      <!-- Header menu links and small screen hamburger menu -->
+      <div class="flex justify-between items-center px-4 sm:px-0">
+        <!-- Header logos -->
+        <div>
+          <router-link to="/">
+            <img :src="logo" class="w-36" alt="Dark Logo" />
+          </router-link>
         </div>
-        <div class="mt-6 flow-root">
-          <div class="-my-6 divide-y divide-gray-500/10">
-            <div class="space-y-2 py-6">
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >Features</a>
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >Marketplace</a>
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >Company</a>
-            </div>
-            <div class="py-6">
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-              >Log in</a>
-            </div>
-          </div>
-        </div>
+
+        <!-- Small screen hamburger menu -->
+        <ExpandMenu :is-open="isOpen" @action:updateIsOpen="updateIsOpen" />
       </div>
+
+      <!-- Header links -->
+      <Router
+        :show-modal="showModal"
+        :is-open="isOpen"
+        @action:updateIsOpen="updateIsOpen"
+      />
     </div>
-  </header>
+  </nav>
 </template>
+
+<script setup>
+import logo from "../assets/logo-light-new.svg";
+import feather from "feather-icons";
+import Router from "./Router.vue";
+import { ref, onMounted, onUpdated } from "vue";
+import ExpandMenu from "../components/shared/ExpandMenu.vue";
+
+const isOpen = ref(false);
+onMounted(() => {
+  feather.replace();
+});
+
+const updateIsOpen = async (value) => {
+  isOpen.value = value;
+};
+
+onUpdated(() => {
+  feather.replace();
+});
+</script>
+
+<style scoped>
+#nav a.router-link-exact-active {
+  @apply text-indigo-700;
+  @apply dark:text-indigo-400;
+  @apply font-medium;
+}
+</style>
