@@ -40,18 +40,24 @@
         </button>
       </div>
       <div class="hidden lg:flex lg:gap-x-12">
-        <a
-          href="#"
+        <router-link
+          to="/"
           class="text-sm font-semibold leading-6 text-gray-900"
-        >Features</a>
-        <a
-          href="#"
+        >
+          Home
+        </router-link>
+        <router-link
+          to="/about"
           class="text-sm font-semibold leading-6 text-gray-900"
-        >Marketplace</a>
-        <a
-          href="#"
+        >
+          About
+        </router-link>
+        <router-link
+          to="/not-found"
           class="text-sm font-semibold leading-6 text-gray-900"
-        >Company</a>
+        >
+          Not Found
+        </router-link>
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
         <a
