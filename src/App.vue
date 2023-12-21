@@ -8,13 +8,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
-import Navigator from "./components/Navigator.vue"
+import Navigator from "./components/shared/Navigator.vue";
 
 export default defineComponent({
   components: {
     Navigator,
   },
-})
+});
 </script>

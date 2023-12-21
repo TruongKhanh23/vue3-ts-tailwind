@@ -28,11 +28,11 @@
 </template>
 
 <script setup>
-import logo from "../assets/logo-light-new.svg";
+import logo from "../../assets/logo-light-new.svg";
 import feather from "feather-icons";
 import Router from "./Router.vue";
 import { ref, onMounted, onUpdated } from "vue";
-import ExpandMenu from "../components/shared/ExpandMenu.vue";
+import ExpandMenu from "./ExpandMenu.vue";
 
 const isOpen = ref(false);
 onMounted(() => {
