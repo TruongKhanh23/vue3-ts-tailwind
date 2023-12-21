@@ -21,6 +21,9 @@ export function renderNodes(links, videos) {
     [BLOCKS.HEADING_4]: customHeading4,
     [BLOCKS.HEADING_5]: customHeading5,
     [BLOCKS.HEADING_6]: customHeading6,
+    [BLOCKS.UL_LIST]: customUnorderedList,
+    [BLOCKS.OL_LIST]: customOrderedList,
+    [BLOCKS.QUOTE]: customQuote,
     [BLOCKS.EMBEDDED_ENTRY]: (node, key, next) =>
       customEmbeddedEntryBlock(node, key, next, videos),
     [BLOCKS.EMBEDDED_ASSET]: (node, key, next) =>
@@ -119,6 +122,37 @@ function customHeading6(node, key, next) {
   return h(
     "h6",
     { key, class: ["text-base font-bold"] },
+    next(node.content, key, next),
+  );
+}
+
+function customUnorderedList(node, key, next) {
+  return h(
+    "ul",
+    { key, style: { "list-style-type": "disc", "padding-left": "20px" } },
+    next(node.content, key, next),
+  );
+}
+
+function customOrderedList(node, key, next) {
+  return h(
+    "ol",
+    { key, style: { "list-style": "decimal", "padding-left": "20px" } },
+    next(node.content, key, next),
+  );
+}
+
+function customQuote(node, key, next) {
+  return h(
+    "div",
+    {
+      key,
+      style: {
+        display: "block",
+        "padding-left": "20px",
+        "border-left": "4px solid black",
+      },
+    },
     next(node.content, key, next),
   );
 }
