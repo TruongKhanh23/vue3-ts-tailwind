@@ -5,14 +5,14 @@
     </h1>
     <RichTextRenderer
       :document="document.content.json"
-      :node-renderers="renderNodes()"
+      :node-renderers="renderNodes(document.content.links)"
       :mark-renderers="renderMarks()"
     />
   </div>
 </template>
 <script>
 import { onMounted, ref, watch } from "vue";
-import { getNews } from "../composables/news/index.js";
+import { getNews, getNewsById } from "../composables/news/index.js";
 import { renderMarks, renderNodes } from "../composables/richText/index.js"
 
 import RichTextRenderer from "contentful-rich-text-vue-renderer";
@@ -29,7 +29,7 @@ export default {
     });
 
     onMounted(async () => {
-      news.value = await getNews();
+      news.value = await getNewsById();
     });
 
     watch(news, async () => {

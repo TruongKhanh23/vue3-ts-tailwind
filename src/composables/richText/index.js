@@ -12,11 +12,18 @@ export function renderMarks() {
   };
 }
 
-export function renderNodes() {
+export function renderNodes(links) {
   return {
     [BLOCKS.PARAGRAPH]: customRenderParagraph,
     [BLOCKS.EMBEDDED_ENTRY]: (node, key, next) =>
       h("div", { key }, next(node.content, key, next)),
+    [BLOCKS.EMBEDDED_ASSET]: (node, key, next) => {
+      const { id } = node.data.target.sys;
+      const { block: assetList } = links.assets;
+      const asset = assetList.find((item) => (item.sys.id = id));
+      const { url: imageUrl } = asset;
+      return h("img", { key, src: imageUrl }, next(node.content, key, next));
+    },
     [BLOCKS.HEADING_2]: customHeading2,
     [INLINES.ASSET_HYPERLINK]: (node, key) =>
       defaultInline(INLINES.ASSET_HYPERLINK, node, key),
@@ -35,6 +42,7 @@ export function renderNodes() {
     },
   };
 }
+
 function customHeading2(node, key, next) {
   return h(
     "h2",
